@@ -1,47 +1,127 @@
 #include<iostream>
 using namespace std;
 
-
-
-class letra {
-    int patron;
-    char paquete[7][5];
-
+template <typename T> class Node {
     public:
-    letra() {
-        patron = 0;
-        for( int i = 0; i < 7; i++) {
-            for( int j=0; j < 5; j++) {
-                paquete[i][j] = 0;
-            }
-        }
-    }
-    
-    void setPatron(int p) {
-        patron = patron;
-    }
+    T payload;
+    Node <T>*prev;
+    Node <T>*next;
 
-    void setPaquete(string p, int fila) {
-        for( int i = 0; i < 5; i++) {
-            paquete[fila][i] = p[i];
-        }
-    }
-
-    void getPaquetes() {
-        for( int j = 0; j < 7; j++) {
-            for( int t = 0; t < 5; t++){
-                cout << paquete[j][t];
-            }
-            cout<< endl;
-        }
+    Node () {
+        prev=next=nullptr;
     }
 
 };
 
-void entrada( letra *(&paquetes)){
-    int numPaquetes = 0;
-    paquetes = new letra[numPaquetes];
-    letra *auxPaquetes = new letra[numPaquetes];
+
+template <typename T> class List {
+    public:
+    Node<T> *first;
+    Node<T> *last;
+
+    List() {
+        this->first=this->last=nullptr;
+    }
+
+    void next(Node<T> &*n) {
+        if(n!= nullptr){
+            n=n->next;
+        }
+    }
+    void prev(Node<T> &*n) {
+        if(n!= nullptr){
+            n=n->prev;
+        }
+    }
+
+
+    void add( T x) {
+        Node<T> *p = new Node();
+        p-> payload = x;
+        if(this->first == nullptr ){
+            this->first = p;
+            this->last = p;
+            return;
+        }
+        this->last.next = p;
+        p->prev=last;
+        this->last =p;
+    }
+    
+};
+
+
+void devolverSegmentos( string p, int fila, string &seg1, string &seg2, string &seg3, string &seg4, string patron ) {
+    if( fila < 4 ) {
+            for (int i = 0; i < 5; i++)
+            {
+                if( i < 3 ) {
+                    seg1 = seg1 + p[i];
+                }
+                if( i > 3 ) {
+                    seg2 = seg2 + p[i];
+                }
+            }
+            
+        }    
+        if( fila > 4 ) {
+            for (int i = 0; i < 5; i++)
+            {
+                if( i < 3 ) {
+                    seg3 = seg3 + p[i];
+                }
+                if( i > 3 ) {
+                    seg4 = seg4 + p[i];
+                }
+            }
+            
+        }    
+}
+
+class Segmento {
+    string segmento;
+    bool estaUsado;
+
+    Segmento(string entrada) {
+        segmento = entrada;
+    }
+};
+
+class Letra {
+    string patron;
+    string segmento1;
+    string segmento2;
+    string segmento3;
+    string segmento4;
+
+
+    public:
+    Letra() {
+        patron = "0";
+        for( int i = 0; i < 7; i++) {
+            segmento1[i] = 0;
+            segmento2[i] = 0;
+            segmento3[i] = 0;
+            segmento4[i] = 0;
+        }
+    }
+    
+    void setPatron(string p) {
+        patron = p;
+    }
+
+    void setPaquete(string seg1, string seg2, string seg3, string seg4) {
+        segmento1 = seg1;
+        segmento2 = seg2;
+        segmento3 = seg3;
+        segmento4 = seg4;
+    }
+
+
+};
+
+List<Letra> entrada () {
+    List<Letra> *paquetes = new List<Letra>();
     string digito;
     string seg1;
     string seg2;
@@ -56,53 +136,26 @@ void entrada( letra *(&paquetes)){
     do
     {
         cin >> digito;
-        if( digito == "ENJOY") return;
+        if(digito == "ENJOY") break;
+        
+        if( j<7) {
+            devolverSegmentos(digito, j-1, seg1, seg2, seg3, seg4,patron);
 
-        else if( j < 7 ) {
-
-            paqueteActual.setPaquete(digito,j - 1);
-            j++;
         } else {
+            devolverSegmentos(digito, j-1, seg1, seg2, seg3, seg4,patron);
 
-            paqueteActual.setPaquete(digito,j - 1);
-
-            delete []auxPaquetes;
-            auxPaquetes = new letra[numPaquetes++];//aumentar afuera
-            for( int i = 0; i < numPaquetes-1; i++) {// cuando se aumenta numpaquetes
-                auxPaquetes[i] = paquetes[i];
-            }
-
-            auxPaquetes[numPaquetes - 1] = paqueteActual; 
+            paquetes->add(paqueteActual);
             
-            delete []paquetes;
-            paquetes = new letra[numPaquetes];
-            for( int i = 0; i < numPaquetes; i++) {
-                paquetes[i] = auxPaquetes[i];
-            }
-            paqueteActual = letra();
-            j = 1;
-            continue;
-
         }
 
-        
-     
-    } while (digito != "ENJOY");
+    } while ( digito == "ENJOY");
     
 
-
+    return *paquetes;
 }
 
+int main () {
 
 
-
-int main(){
-
-    letra *paquetes;
-    entrada(paquetes);
-
-    for( int i = 0; i < 2; i++){
-        paquetes[i].getPaquetes();
-    }
-
+    return 0;
 }

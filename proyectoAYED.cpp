@@ -184,6 +184,7 @@ void isPatronSegmento( Segmento seg1, Segmento seg2, Segmento seg3, Segmento seg
 class Letra {
     public:
     int numPatron;
+    char letra;
     string segmento1 = "";
     string segmento2 = "";
     string segmento3 = "";
@@ -192,12 +193,11 @@ class Letra {
 
     
     Letra() {
-        numPatron = -1;
-        
-            segmento1 = "-1";
-            segmento2 = "-1";
-            segmento3 = "-1";
-            segmento4 = "-1";
+        numPatron = -1;    
+        segmento1 = "-1";
+        segmento2 = "-1";
+        segmento3 = "-1";
+        segmento4 = "-1";
     }
     
     void setPatron(int p) {
@@ -217,7 +217,7 @@ class Letra {
 List<Letra> entrada () {
     List<Letra> *paquetes = new List<Letra>();
     string digito;
-    string seg1;
+    string seg1= "";
     string seg2 = "";
     string seg3 = "";
     string seg4 = "";
@@ -261,6 +261,247 @@ List<Letra> entrada () {
 
     return *paquetes;
 }
+
+void segmentosUsados (Patron &patronLetra) {
+
+    Node<Segmento> *s = patronLetra.segEntrada->first;
+
+    while( s != nullptr) {
+        s->payload.changeUsed();
+        s = s->next;
+    }
+}
+
+
+void backtracking( List<Letra> paquetes, Node<Letra> *p) {
+    if( p == nullptr) {
+        //Imprimir letras y retorno
+        return;
+    }
+
+    Patron patronLetraActual = arrPatrones[p->payload.numPatron];
+    Node<Segmento> *n = patronLetraActual.segEntrada->first;
+    
+    
+
+    switch (p->payload.numPatron)
+    {
+    case 0:
+        segmentosUsados(patronLetraActual);
+        p->payload.letra = '0';
+        backtracking(paquetes,p->next);
+        
+        break;
+    case 3:
+        segmentosUsados(patronLetraActual);
+        p->payload.letra = '3'; 
+        backtracking(paquetes,p->next);
+
+        break;
+    
+    case 4:
+           segmentosUsados(patronLetraActual);
+        p->payload.letra = '4';
+        backtracking(paquetes,p->next);
+
+        break;
+    
+    case 5:
+        segmentosUsados(patronLetraActual);
+        p->payload.letra = '5';
+        backtracking(paquetes,p->next);
+
+        break;
+    
+    case 7:
+           segmentosUsados(patronLetraActual);
+        p->payload.letra = '7';
+        backtracking(paquetes,p->next);
+
+        break;
+    
+    case 9:
+           segmentosUsados(patronLetraActual);
+        p->payload.letra = '9';
+        backtracking(paquetes,p->next);
+
+        break;
+    
+    case '<':
+           segmentosUsados(patronLetraActual);
+        p->payload.letra = '<';
+        backtracking(paquetes,p->next);
+
+        break;
+    
+    case '>':   
+           segmentosUsados(patronLetraActual);
+        p->payload.letra = '>';
+        backtracking(paquetes,p->next);
+
+        break;
+    
+    case '@':   
+           segmentosUsados(patronLetraActual);
+        p->payload.letra = '@';
+        backtracking(paquetes,p->next);
+
+        break;
+    
+    case 'A ':
+           segmentosUsados(patronLetraActual);
+        p->payload.letra = 'A';
+        backtracking(paquetes,p->next);
+
+        break;
+    
+    case 'G':
+           segmentosUsados(patronLetraActual);
+        p->payload.letra = 'G';
+        backtracking(paquetes,p->next);
+
+        break;
+    
+    case 'H':
+           segmentosUsados(patronLetraActual);
+        p->payload.letra = 'H';
+        backtracking(paquetes,p->next);
+
+        break;
+    
+    case 'K':
+           segmentosUsados(patronLetraActual);
+        p->payload.letra = 'K';
+        backtracking(paquetes,p->next);
+
+        break;
+    
+    case 'L':
+           segmentosUsados(patronLetraActual);
+        p->payload.letra = 'L';
+        backtracking(paquetes,p->next);
+
+        break;
+    
+    case 'M':
+           segmentosUsados(patronLetraActual);
+        p->payload.letra = 'M';
+        backtracking(paquetes,p->next);
+
+        break;
+    
+    case 'N':
+           segmentosUsados(patronLetraActual);
+        p->payload.letra = 'N';
+        backtracking(paquetes,p->next);
+
+        break;
+    
+    case 'Q':
+           segmentosUsados(patronLetraActual);
+        p->payload.letra = 'Q'; 
+        backtracking(paquetes,p->next);
+
+        break;
+    
+    case 'R':
+           segmentosUsados(patronLetraActual);
+        p->payload.letra = 'R';
+        backtracking(paquetes,p->next);
+
+        break;
+    
+    case 'Y':
+           segmentosUsados(patronLetraActual);
+        p->payload.letra = 'Y';
+        backtracking(paquetes,p->next);
+
+        break;
+    
+    case 'Z':
+           segmentosUsados(patronLetraActual);
+        p->payload.letra = 'Z';
+        backtracking(paquetes,p->next);
+
+        break;
+    
+    case '[':
+           segmentosUsados(patronLetraActual);
+        p->payload.letra = '[';
+        backtracking(paquetes,p->next);
+
+        break;
+    
+    case ']':   
+           segmentosUsados(patronLetraActual);
+        p->payload.letra = ']';
+        backtracking(paquetes,p->next);
+
+        break;
+    
+    case 'a ':
+        segmentosUsados(patronLetraActual);
+        p->payload.letra = 'a';
+        backtracking(paquetes,p->next);
+
+        break;
+    
+    case 'b':
+           segmentosUsados(patronLetraActual);
+        p->payload.letra = 'b';
+        backtracking(paquetes,p->next);
+
+        break;
+    
+    case 'c':
+           segmentosUsados(patronLetraActual);
+        p->payload.letra = 'c'; 
+        backtracking(paquetes,p->next);
+
+        break;
+    
+    case 'd':
+           segmentosUsados(patronLetraActual);
+        p->payload.letra = 'd';
+        backtracking(paquetes,p->next);
+
+        break;
+    
+    case 'f':
+           segmentosUsados(patronLetraActual);
+        p->payload.letra = 'f';
+        backtracking(paquetes,p->next);
+
+        break;
+    
+    case 'h':
+           segmentosUsados(patronLetraActual);
+        p->payload.letra = 'h';
+        backtracking(paquetes,p->next);
+
+        break;
+    
+    case 'i':
+           segmentosUsados(patronLetraActual);
+        p->payload.letra = 'i';
+        backtracking(paquetes,p->next);
+
+        break;
+    
+   
+    default:
+        break;
+    }
+
+
+
+}
+
+
+
+
+
+
 
 int main () {
     List<Letra> p;

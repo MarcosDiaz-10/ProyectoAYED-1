@@ -4,6 +4,27 @@ string segmentospatron1[20]={"000100","000000","000001","000010","010000","10000
 
 
 
+class Segmento {
+    public:
+    string segmento;
+    bool isUsed;
+
+    Segmento() {
+        segmento = "";
+        isUsed = false;
+    }
+
+    Segmento(string entrada) {
+        segmento = entrada;
+        isUsed = false;
+    }
+
+    void changeUsed() {
+        isUsed = !isUsed;
+    }
+    
+};
+
 
 
 
@@ -29,12 +50,12 @@ template <typename T> class List {
         this->first=this->last=nullptr;
     }
 
-    void next(Node<T> &*n) {
+    void next(Node<T> *&n) {
         if(n!= nullptr){
             n=n->next;
         }
     }
-    void prev(Node<T> &*n) {
+    void prev(Node<T> *&n) {
         if(n!= nullptr){
             n=n->prev;
         }
@@ -42,218 +63,152 @@ template <typename T> class List {
 
 
     void add( T x) {
-        Node<T> *p = new Node();
+        Node<T> *p = new Node<T>();
         p-> payload = x;
         if(this->first == nullptr ){
             this->first = p;
             this->last = p;
             return;
         }
-        this->last.next = p;
+        this->last->next = p;
         p->prev=last;
         this->last =p;
     }
+
+    
     
 };
 
 class Patron{
     public:
     string patronn ;
-
     string *posiblesSeg;
+    int numPosiblesSegmentos;
+    List<Segmento> *segEntrada;
    
 
-    Patron (string p, string (&segmentosP)[]){
-     this->patronn = p;
+    Patron (string p, string (&segmentosP)[],int numSegmentos){
+        segEntrada = new List<Segmento>();
+        this->patronn = p;
+        this->numPosiblesSegmentos = numSegmentos;
         posiblesSeg=segmentosP;
     }
     
 
 }; 
+string arrSegmentos1[4] = {"111010","110110","111110","011110"};
+string arrSegmentos2[4] = {"010100","110010","101101","000111"};
+Patron arrPatrones[2] = {Patron("100000110000",arrSegmentos1,4), Patron("101100110100",arrSegmentos2,4)};
 
 
-void devolverSegmentos( string p, int fila, string &seg1, string &seg2, string &seg3, string &seg4, string &patronColumna, string &patronFila, string &patron ) {
+void devolverSegmentos( string p, int fila, string &seg1, string &seg2, string &seg3, string &seg4, string &patronColumna, string &patronFila ) {
 
-    if( fila == 4 ) {
+    if( fila == 3 ) {
         patronFila = p;
         patronColumna = patronColumna + p[3];
 
     }
-    if( fila < 4 ) {
+    if( fila < 3 ) {
             for (int i = 0; i < 5; i++)
             {
-                if( i < 3 ) {
+                if( i < 2 ) {
                     seg1 = seg1 + p[i];
                 }
-                if( i > 3 ) {
+                if( i > 2 ) {
                     seg2 = seg2 + p[i];
                 }
-                if(i == 3 ) {
+                if(i == 2 ) {
                     patronColumna = patronColumna + p[i];
                 }
             }
             
         }    
-        if( fila > 4 ) {
+        if( fila > 3 ) {
             for (int i = 0; i < 5; i++)
             {
-                if( i < 3 ) {
+                if( i < 2 ) {
                     seg3 = seg3 + p[i];
                 }
-                if( i > 3 ) {
+                if( i > 2 ) {
                     seg4 = seg4 + p[i];
                 }
-                if(i == 3 ) {
+                if(i == 2 ) {
                     patronColumna = patronColumna + p[i];
                 }
             }
             
         } 
         
-        if (fila == 7) {
-            patron = patronColumna + patronFila;
-        } 
  }
 
-int isPatron( string patron,  Patron arrPatrones[]){ 
+int isPatron( string patron,  Patron arrPatrones[], int numPatrones){ 
     
-
+    int patronEncontrado=-1;
+    for (int i = 0; i < numPatrones; i++)
+    {
+        
+        if(arrPatrones[i].patronn == patron){
+            patronEncontrado=i+1;
+            return patronEncontrado;
+        }; 
+    }
+    return patronEncontrado;
 
 }
 
-class Segmento {
-    string segmento;
-    bool estaUsado;
 
-    Segmento(string entrada) {
-        segmento = entrada;
+
+void isPatronSegmento( Segmento seg1, Segmento seg2, Segmento seg3, Segmento seg4, Patron ArrPatrones[], int numPatrones) {
+
+    for (int i = 0; i < numPatrones; i++)
+    {
+        for (int j = 0; j < ArrPatrones[i].numPosiblesSegmentos; j++)
+        {
+            if(ArrPatrones[i].posiblesSeg[j] == seg1.segmento) {
+                ArrPatrones[i].segEntrada->add(seg1);
+            } else if(ArrPatrones[i].posiblesSeg[j] == seg2.segmento) {
+                ArrPatrones[i].segEntrada->add(seg2);
+            } else if( ArrPatrones[i].posiblesSeg[j] == seg3.segmento) {
+                ArrPatrones[i].segEntrada->add(seg3);
+            } else if(ArrPatrones[i].posiblesSeg[j] == seg4.segmento) {
+                ArrPatrones[i].segEntrada->add(seg4);
+            }
+        }
+        
     }
-};
+    
+
+}
+
 
 class Letra {
-    string patron = "";
+    public:
+    int numPatron;
     string segmento1 = "";
     string segmento2 = "";
     string segmento3 = "";
     string segmento4 = "";
 
-<<<<<<< HEAD
-=======
-template <typename T> class Node {
-    public:
-    T payload;
-    Node <T>*prev;
-    Node <T>*next;
 
-    Node () {
-        prev=next=nullptr;
-    }
-
-};
-
-
-template <typename T> class List {
-    public:
-    Node<T> *first;
-    Node<T> *last;
-
-    List() {
-        this->first=this->last=nullptr;
-    }
-
-    void next(Node<T> &*n) {
-        if(n!= nullptr){
-            n=n->next;
-        }
-    }
-    void prev(Node<T> &*n) {
-        if(n!= nullptr){
-            n=n->prev;
-        }
-    }
-
-
-    void add( T x) {
-        Node<T> *p = new Node();
-        p-> payload = x;
-        if(this->first == nullptr ){
-            this->first = p;
-            this->last = p;
-            return;
-        }
-        this->last.next = p;
-        p->prev=last;
-        this->last =p;
-    }
     
-};
-
-
-void devolverSegmentos( string p, int fila, string &seg1, string &seg2, string &seg3, string &seg4, string patron ) {
-    if( fila < 4 ) {
-            for (int i = 0; i < 5; i++)
-            {
-                if( i < 3 ) {
-                    seg1 = seg1 + p[i];
-                }
-                if( i > 3 ) {
-                    seg2 = seg2 + p[i];
-                }
-            }
-            
-        }    
-        if( fila > 4 ) {
-            for (int i = 0; i < 5; i++)
-            {
-                if( i < 3 ) {
-                    seg3 = seg3 + p[i];
-                }
-                if( i > 3 ) {
-                    seg4 = seg4 + p[i];
-                }
-            }
-            
-        }    
-}
-
-class Segmento {
-    string segmento;
-    bool estaUsado;
-
-    Segmento(string entrada) {
-        segmento = entrada;
-    }
-};
-
-class Letra {
-    string patron;
-    string segmento1;
-    string segmento2;
-    string segmento3;
-    string segmento4;
-
->>>>>>> 62cee2db6f885260e1d83b4f5b0edad04edc10ee
-
-    public:
     Letra() {
-        patron = "0";
-        for( int i = 0; i < 7; i++) {
-            segmento1[i] = 0;
-            segmento2[i] = 0;
-            segmento3[i] = 0;
-            segmento4[i] = 0;
-        }
+        numPatron = -1;
+        
+            segmento1 = "-1";
+            segmento2 = "-1";
+            segmento3 = "-1";
+            segmento4 = "-1";
     }
     
-    void setPatron(string p) {
-        patron = p;
+    void setPatron(int p) {
+        numPatron = p;
     }
 
-    void setPaquete(string seg1, string seg2, string seg3, string seg4) {
-        segmento1 = seg1;
-        segmento2 = seg2;
-        segmento3 = seg3;
-        segmento4 = seg4;
+    void setPaquete(Segmento seg1, Segmento seg2, Segmento seg3, Segmento seg4) {
+        segmento1 = seg1.segmento;
+        segmento2 = seg2.segmento;
+        segmento3 = seg3.segmento;
+        segmento4 = seg4.segmento;
     }
 
 
@@ -263,20 +218,12 @@ List<Letra> entrada () {
     List<Letra> *paquetes = new List<Letra>();
     string digito;
     string seg1;
-<<<<<<< HEAD
     string seg2 = "";
     string seg3 = "";
     string seg4 = "";
     string patron = "";
     string patronColumna="";
     string patronFila="";
-=======
-    string seg2;
-    string seg3;
-    string seg4;
-    string patron;
-
->>>>>>> 62cee2db6f885260e1d83b4f5b0edad04edc10ee
     int j=1;
     Letra paqueteActual;
 
@@ -287,38 +234,41 @@ List<Letra> entrada () {
         if(digito == "ENJOY") break;
         
         if( j<7) {
-<<<<<<< HEAD
-            devolverSegmentos(digito, j-1, seg1, seg2, seg3, seg4,patronColumna, patronFila,patron);
+            devolverSegmentos(digito, j-1, seg1, seg2, seg3, seg4,patronColumna, patronFila);
             j++;
           }
 
         else{
 
-            devolverSegmentos(digito, j-1, seg1, seg2, seg3, seg4,patronColumna, patronFila,patron);
+            devolverSegmentos(digito, j-1, seg1, seg2, seg3, seg4,patronColumna, patronFila);
+            patron = patronColumna + patronFila;
+            Segmento segmento1 = Segmento(seg1);
+            Segmento segmento2 = Segmento(seg2);
+            Segmento segmento3 = Segmento(seg3);
+            Segmento segmento4 = Segmento(seg4);
 
-=======
-            devolverSegmentos(digito, j-1, seg1, seg2, seg3, seg4,patron);
 
-        } else {
-            devolverSegmentos(digito, j-1, seg1, seg2, seg3, seg4,patron);
+            int numPatronPaquete = isPatron(patron, arrPatrones,2);
+            isPatronSegmento(segmento1,segmento2,segmento3,segmento4,arrPatrones,2);
 
->>>>>>> 62cee2db6f885260e1d83b4f5b0edad04edc10ee
+            paqueteActual.setPatron(numPatronPaquete);
             paquetes->add(paqueteActual);
             
         }
 
-<<<<<<< HEAD
     } while ( digito != "ENJOY");
-=======
-    } while ( digito == "ENJOY");
->>>>>>> 62cee2db6f885260e1d83b4f5b0edad04edc10ee
     
 
     return *paquetes;
 }
 
 int main () {
+    List<Letra> p;
 
+    Node<Letra> *n;
+    p = entrada();
+
+    n = p.first;
 
     return 0;
 }

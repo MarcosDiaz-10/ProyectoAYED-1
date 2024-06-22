@@ -1,5 +1,11 @@
 #include<iostream>
 using namespace std;
+string segmentospatron1[20]={"000100","000000","000001","000010","010000","100000","000001","000010","110000","110000","xxxxxx","xxxxxx","xxxxxx","xxxxxx","xxxxxx","xxxxxx",};
+
+
+
+
+
 
 template <typename T> class Node {
     public:
@@ -50,8 +56,29 @@ template <typename T> class List {
     
 };
 
+class Patron{
+    public:
+    string patronn ;
 
-void devolverSegmentos( string p, int fila, string &seg1, string &seg2, string &seg3, string &seg4, string patron ) {
+    string *posiblesSeg;
+   
+
+    Patron (string p, string (&segmentosP)[]){
+     this->patronn = p;
+        posiblesSeg=segmentosP;
+    }
+    
+
+}; 
+
+
+void devolverSegmentos( string p, int fila, string &seg1, string &seg2, string &seg3, string &seg4, string &patronColumna, string &patronFila, string &patron ) {
+
+    if( fila == 4 ) {
+        patronFila = p;
+        patronColumna = patronColumna + p[3];
+
+    }
     if( fila < 4 ) {
             for (int i = 0; i < 5; i++)
             {
@@ -60,6 +87,9 @@ void devolverSegmentos( string p, int fila, string &seg1, string &seg2, string &
                 }
                 if( i > 3 ) {
                     seg2 = seg2 + p[i];
+                }
+                if(i == 3 ) {
+                    patronColumna = patronColumna + p[i];
                 }
             }
             
@@ -73,9 +103,22 @@ void devolverSegmentos( string p, int fila, string &seg1, string &seg2, string &
                 if( i > 3 ) {
                     seg4 = seg4 + p[i];
                 }
+                if(i == 3 ) {
+                    patronColumna = patronColumna + p[i];
+                }
             }
             
-        }    
+        } 
+        
+        if (fila == 7) {
+            patron = patronColumna + patronFila;
+        } 
+ }
+
+int isPatron( string patron,  Patron arrPatrones[]){ 
+    
+
+
 }
 
 class Segmento {
@@ -88,11 +131,11 @@ class Segmento {
 };
 
 class Letra {
-    string patron;
-    string segmento1;
-    string segmento2;
-    string segmento3;
-    string segmento4;
+    string patron = "";
+    string segmento1 = "";
+    string segmento2 = "";
+    string segmento3 = "";
+    string segmento4 = "";
 
 
     public:
@@ -124,11 +167,12 @@ List<Letra> entrada () {
     List<Letra> *paquetes = new List<Letra>();
     string digito;
     string seg1;
-    string seg2;
-    string seg3;
-    string seg4;
-    string patron;
-
+    string seg2 = "";
+    string seg3 = "";
+    string seg4 = "";
+    string patron = "";
+    string patronColumna="";
+    string patronFila="";
     int j=1;
     Letra paqueteActual;
 
@@ -139,16 +183,19 @@ List<Letra> entrada () {
         if(digito == "ENJOY") break;
         
         if( j<7) {
-            devolverSegmentos(digito, j-1, seg1, seg2, seg3, seg4,patron);
+            devolverSegmentos(digito, j-1, seg1, seg2, seg3, seg4,patronColumna, patronFila,patron);
+            j++;
+          }
 
-        } else {
-            devolverSegmentos(digito, j-1, seg1, seg2, seg3, seg4,patron);
+        else{
+
+            devolverSegmentos(digito, j-1, seg1, seg2, seg3, seg4,patronColumna, patronFila,patron);
 
             paquetes->add(paqueteActual);
             
         }
 
-    } while ( digito == "ENJOY");
+    } while ( digito != "ENJOY");
     
 
     return *paquetes;
